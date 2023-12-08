@@ -15,6 +15,7 @@ urlpatterns = [
     # User management
     path("users/", include("panumbaweb.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+    path ("interface/", include("panumbaweb.interface.urls", namespace="interface")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -30,6 +31,7 @@ urlpatterns += [
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
+    
 ]
 
 if settings.DEBUG:
