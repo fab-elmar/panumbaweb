@@ -28,9 +28,7 @@ class AIcontactListView(ListView):
     template_name = "interface/panumba_list.html"
     context_object_name = "AIcontacts"
     ordering = ["id"]
-    paginate_by = 10
-    paginate_orphans = 5
-    allow_empty_first_page = True
+   
     queryset = AIcontact.objects.all()
 
 
