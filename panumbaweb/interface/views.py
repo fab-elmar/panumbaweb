@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
+import re
 
 
 from django.http import JsonResponse
@@ -70,25 +71,29 @@ class PanumbaQuestionView(View):
         
         logger.info('Response: %s', response)
         logger.info('Response choices: %s',   content)
-        content = response.choices[0].message.content
-        content = content.replace("'", "\\'").replace("\\", "\\\\")
         
+       
+        # Replace escaped single quotes and backslashes
+        content = content.replace("'", "\\'").replace("\\", "\\\\")
+
+        # Remove commas from numbers
+        content = re.sub(r'(\d),(\d)', r'\1\2', content)
         try:
             response_content = json.loads(content)
         except json.JSONDecodeError as e:
             logger.info(f"Error parsing JSON content: {e}")
-            return render(request, self.template_name, {'error': 'Invalid response format.'})
+            return render(request, self.template_name, {'context': 'Invalid response format.'})
         
 
         # Extract 'number' and 'context' values
         number = response_content.get('number')
         context = response_content.get('context')
         
-       
-        if not number.isdigit():
-            number = number.replace(',', '')
-            number = float(number)  
-            number = int(number)
+        if isinstance(number, str):
+            number = int(number.replace(',', ''))
+        
+        number = int(number)
+        logger.info('Number: %s', number)
        
         
         response_data = {
@@ -104,7 +109,7 @@ class PanumbaQuestionView(View):
         
 
         
-        return render(request, self.template_name)
+        return render(request, self.template_name, {'context': context})
     
     
     
