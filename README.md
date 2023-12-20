@@ -1,11 +1,67 @@
 # panumbaWeb
 
-Behold My Awesome Project!
+
+
+
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-License: MIT
+
+
+
+Zum Starten:
+
+repository clonen
+
+1. v-env erstellen:
+python -m venv venv
+
+2. aktiviren 
+source venv/bin/activate
+
+3. install Dependencies
+pip install -r requirements.txt
+
+4. Set Up the Database
+   hier muss du kucken. bei Paul muss wahrscheinlich erstaml postgress installiert werden
+   dann in postgres DB erstellen:
+   CREATE DATABASE panumb       (name ist eigentlich egal, aber das is der der in settings/base.py definiert 
+                                          ist)
+
+  hier ein aus zug aus settings/bas.py, wie DB settings fuer das Porjekt aussehen. das regelt alles django
+  
+DATABASES = {
+    "default": env.db(
+        "DATABASE_URL",
+        default="postgres:///panumba",
+    ),
+
+
+4.  Dann .local/.env in terminal pasten exportieren
+
+   dann brauchen wir noch den ApiKey fuer OpenAi den gibts an anderer stelle...
+
+
+
+5. dann die DB migirieren dazu einfach im terminal in project root wo sich manage.py file befindet:
+      python manage.py migrate
+
+
+6. da die eingabe der Fragen hinter loging versteckt. muessen wir einen super user kreiren. (mit super user hat man auch gleich zu griffl auf http://127.0.0.1:8000/admin/
+   auch in project root:
+   python manage.py createsuperuser
+
+
+7. und wenn alles geklappt hat dann startet man so den server:
+   python manage.py runserver
+
+
+
+
+JUHU!!!    einloggen dann hast man zugang question input. 7 segment und die liste der bisherigen Abfragen benoetigen keinen loggin.
+
+
 
 ## Settings
 
