@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Numba{% endblock title %}
+{% block content %}
+<style>
+    body {
+        background-color: black;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;  
+    }
+    .navbar {
+        display: none; 
+    }
+</style>
+
+    
+    
+<canvas id="display" width="1400" height='360' style='text-align: center'>
+
+</canvas>
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/segment-display.js' %}"></script>
+<script src="{% static 'js/showNumber.js' %}"></script>
+
+<script>
+    const url = "{% url 'interface:api_latest_answer' %}"
+    const anotherUrl = "{% url 'interface:world_population' %}"
+</script>
+
+<script type="text/javascript">
+{% comment %} var display
+
+$(document).ready(function() {
+
+   console.log("ready!");
+   
+  display = new SegmentDisplay("display");
+  display.pattern         = "##########";
+  display.displayAngle    = 0;
+  display.digitHeight     = 28.5;
+  display.digitWidth      = 14;
+  display.digitDistance   = 2.5;
+  display.segmentWidth    = 2;
+  display.segmentDistance = 0.3;
+  display.segmentCount    = 7;
+  display.cornerType      = 3;
+  display.colorOn         = "#0f0";
+  display.colorOff        = "black";
+  display.draw();
+
+   
+  setInterval(fetchLatestAnswer, 3000);
+
+  fetchLatestAnswer();
+
+});
+function fetchLatestAnswer() {
+        $.ajax({
+            url: url,
+            success: function(data) {
+                const formattedAnswer = formatResponseForDisplay(data.answer);
+
+                display.setValue(formattedAnswer);  
+                console.log("latest answer fetched", data.answer);
+            }
+        });
+    }
+
+
+function formatResponseForDisplay(data) {
+    let formattedString = String(data);
+
+    // Truncate if longer than 10 characters
+    if (formattedString.length > 10) {
+        formattedString = formattedString.substring(0, 10);
+    }
+    // Pad with leading spaces if shorter than 10 characters
+    else if (formattedString.length < 10) {
+        const padding = 10 - formattedString.length;
+        formattedString = ' '.repeat(padding) + formattedString;
+    }
+
+    return formattedString;
+} {% endcomment %}
+</script>
+
+
+
+
+{% endblock javascript %}

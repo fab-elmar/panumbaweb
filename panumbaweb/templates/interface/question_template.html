@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Pnaumba Ask{% endblock title %}
+{% block content %}   
+ <style>
+    body {
+        background-color: black;
+        /* background-image: radial-gradient(rgba(0, 150, 0, 0.75), black 120%); */
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+        padding: 2rem;
+        color: #0f0;
+        font-family: 'Inconsolata', monospace;
+        font-size: 1.3rem;
+        text-shadow: 0 0 5px #C8C8C8;
+    }
+
+    .terminal-input {
+        background-color: transparent;
+        border: none;
+        color: #0f0;
+        font-family: inherit;
+         &:focus {
+            background-color: transparent;
+            box-shadow: none; /* Removes the glow effect if any */
+            color: #0f0;
+        }
+    }
+
+    .input-group-text {
+        background-color: transparent;
+        border: none;
+        color: #0f0;
+        font-family: inherit;
+    }
+
+    .input-group-prepend {
+        margin-right: -1px;
+    }
+
+    .blinking-cursor {
+        color: green;
+        font-weight: bold;
+        
+        font-size: 1.5rem;
+        animation: blinkingCursor 1s infinite;
+    }
+
+    
+    @keyframes blinkingCursor {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+
+
+    .container {
+        padding-top: 50px;
+    }
+</style>
+
+<div class="container">
+    <h1 class="text-center mb-4">Panumba Terminal</h1>
+    <form action="{% url 'interface:question' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="questionInput" class="form-label">Enter your question:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text blinking-cursor">></span>
+                </div>
+                <input type="text" class="form-control terminal-input" id="questionInput" name="question" placeholder="Type your question here..." autocomplete="off">
+            </div>
+        </div>
+        <!--<button type="submit" class="btn btn-primary">Submit</button> -->
+    </form>
+</div>
+{% endblock content %}
