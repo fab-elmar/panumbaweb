@@ -5,7 +5,7 @@ $(document).ready(function() {
    console.log("ready!");
    
   display = new SegmentDisplay("display");
-  display.pattern         = "##########";
+  display.pattern         = "###########";
   display.displayAngle    = 0;
   display.digitHeight     = 60;
   display.digitWidth      = 30;
@@ -40,7 +40,9 @@ function fetchLatestAnswer() {
                 sameAnswerCount = 0;
             }
 
-            // If the same answer has been fetched 5 times, send a different request
+            // If the same answer has been fetched 5 times, send a different request to get number from world
+            
+            /*    commented out for now cause not fetching from worldometeter laueft noch nicht           
             if (sameAnswerCount === 3) {
                 $.ajax({
                     url: anotherUrl,  // Replace with your other URL
@@ -51,37 +53,27 @@ function fetchLatestAnswer() {
                     }
                 });
             }
-
+ */
+            
             lastAnswer = data.answer;
-
+            console.log("latest answer fetched", data.answer, sameAnswerCount);
             display.setValue(formattedAnswer);  
-            console.log("latest answer fetched", data.answer);
+            
         }
     });
 }
-/* function fetchLatestAnswer() {
-        $.ajax({
-            url: url,
-            success: function(data) {
-                const formattedAnswer = formatResponseForDisplay(data.answer);
 
-                display.setValue(formattedAnswer);  
-                console.log("latest answer fetched", data.answer);
-            }
-        });
-    }
- */
 
 function formatResponseForDisplay(data) {
     let formattedString = String(data);
 
-    // Truncate if longer than 10 characters
-    if (formattedString.length > 10) {
+    // Truncate if longer than 1 characters
+    if (formattedString.length > 11) {
         formattedString = formattedString.substring(0, 10);
     }
-    // Pad with leading spaces if shorter than 10 characters
-    else if (formattedString.length < 10) {
-        const padding = 10 - formattedString.length;
+    // Pad with leading spaces if shorter than 11 characters
+    else if (formattedString.length < 11) {
+        const padding = 11 - formattedString.length;
         formattedString = ' '.repeat(padding) + formattedString;
     }
 

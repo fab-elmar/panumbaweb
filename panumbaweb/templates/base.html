@@ -71,15 +71,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
+              <a class="nav-link" href="{% url 'interface:index' %}"> List all <span class="visually-hidden">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">About</a>
+              <a class="nav-link" href="{% url 'interface:show_number' %}">7-Segment View</a>
             </li>
             {% if request.user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link"
-                   href="{% url 'users:detail' request.user.username %}">{% translate "My Profile" %}</a>
+                   href="{% url 'interface:question' %}">{% translate "question terminal" %}</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
@@ -115,7 +115,7 @@
       {% endfor %}
     {% endif %}
     {% block content %}
-      <p>Use this document as a way to quick start any new project.</p>
+      <p></p>
     {% endblock content %}
   </div>
   <!-- /container -->
