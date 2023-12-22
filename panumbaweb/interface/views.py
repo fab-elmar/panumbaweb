@@ -7,7 +7,7 @@ import re
 
 
 from django.http import JsonResponse
-from worldometer.world import WorldCounters
+
 from openai import OpenAI
 from asgiref.sync import sync_to_async
 
