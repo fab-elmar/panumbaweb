@@ -279,3 +279,5 @@ panumbaweb/media/
 .env
 .envs/*
 !.envs/.local/
+
+panumba/
