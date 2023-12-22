@@ -33,7 +33,7 @@ class AIcontactListView(ListView):
     queryset = AIcontact.objects.all()
 
 
-@method_decorator(login_required, name='dispatch')
+
 class PanumbaQuestionView(View):
     template_name = "interface/question_template.html"
     def get(self, request, *args, **kwargs):
