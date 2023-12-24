@@ -121,7 +121,7 @@ class PanumbaQuestionView(View):
 
             # Save the fields into variables
             ip= latest_instance.ip
-            number= latest_instance.number
+
             red= latest_instance.red
             green= latest_instance.green
             blue= latest_instance.blue

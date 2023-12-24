@@ -17,7 +17,6 @@ class AIcontact(models.Model):
     
 class SendToCCC(models.Model):
     ip = models.CharField(max_length=100)
-    number = models.BigIntegerField(default=0)
     red = models.IntegerField( default=0, validators=[MinValueValidator(0), MaxValueValidator(255)])
     green = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(255)])
     blue = models.IntegerField( default=0, validators=[MinValueValidator(0), MaxValueValidator(255)])

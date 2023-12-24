@@ -19,8 +19,8 @@ class AIcontactAdmin(admin.ModelAdmin):
         
 @admin.register(SendToCCC)
 class SendToCCCDisplayAdmin(admin.ModelAdmin):
-    list_display = ( "ip", "number", "red", "green", "blue", "token")
-    list_filter = ( "ip", "number", "red", "green", "blue", "token")
+    list_display = ( "ip", "red", "green", "blue", "token")
+    list_filter = ( "ip",  "red", "green", "blue", "token")
    
     def add_view(self, request, form_url='', extra_context=None):
         url = f'http://<ip>/number?n=<number>&r=<red>&g=<green>&b=<blue>&token=<token>'
