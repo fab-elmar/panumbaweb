@@ -4,6 +4,9 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 import re
+from django.core.cache import cache
+import requests
+import time
 
 
 from django.http import JsonResponse
@@ -15,7 +18,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .models import AIcontact
+from .models import AIcontact, SendToCCC
 from django.views import View
 
 import logging
@@ -23,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 
-# @method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class AIcontactListView(ListView):
     model = AIcontact
     template_name = "interface/panumba_list.html"
@@ -51,6 +54,18 @@ class PanumbaQuestionView(View):
             logger.error("OpenAI API key is not set.")
            
             return render(request, self.template_name, {'error': 'API key not set.'})
+         # Check if a request was sent less than waiting_time in  seconds ago
+        last_request_time = cache.get('last_request_time')
+        
+        waiting_time = 20
+        if last_request_time is not None:
+            time_since_last_request = time.time() - last_request_time
+            if time_since_last_request < waiting_time:
+                logger.info(f"Request sent too soon ({time_since_last_request} seconds since last request).")
+                return render(request, self.template_name,  {'error': f'Please wait before sending another question.', 'time': waiting_time - time_since_last_request})
+
+        # Update the time of the last request
+        cache.set('last_request_time', time.time(), waiting_time)
         client = OpenAI(api_key=openai_api_key)
         MODEL = "gpt-3.5-turbo"
         # INSTRUCTION = "Provide an answer in two parts the answer should have to key value paiars. The first key 'number' should have an integer as value that is logically associated with the question or in case there is the direct answer. The second part, under the key 'context', should be a brief explanation of the logic used to derive the number. For direct questions like 'How many days are in a week?', return the factual answer. For abstract questions like 'What color is the sky?', derive a number using a logical method and explain this method in the context." 
@@ -90,12 +105,33 @@ class PanumbaQuestionView(View):
         context = response_content.get('context')
         
         if isinstance(number, str):
-            number = int(number.replace(',', ''))
+            try:
+                number = int(number.replace(',', ''))
+            except:
+                logger.info(f"Error parsing number: {number}")
+                return render(request, self.template_name, {'context': 'Invalid response format.'})
         
         number = int(number)
         logger.info('Number: %s', number)
-       
         
+        # Send GET request with number as query string
+        try:
+            # Retrieve the latest instance of SendToCCC
+            latest_instance = SendToCCC.objects.latest('id')  # Replace 'id' with 'created_at' if you have that field
+
+            # Save the fields into variables
+            ip= latest_instance.ip
+            number= latest_instance.number
+            red= latest_instance.red
+            green= latest_instance.green
+            blue= latest_instance.blue
+            token= latest_instance.token
+            url = f'http://{ip}/number?n={number}&r={red}&g={green}&b={blue}&token={token}'
+            requests.get(url)
+            logger.info('Request sent successfully, to url: %s', url)
+        except requests.exceptions.RequestException as e:
+            logger.error(f'Failed to send request: {e}')
+            
         response_data = {
             "question": user_question,
             "number": number,
@@ -123,7 +159,7 @@ class ShowNumberView(View):
     
     
     
-    
+    """ 
 
 
 
@@ -140,4 +176,4 @@ class WorldPopulationView(View):
             bicycle_count = 'Data not found'
             
         logger.info('World Bici: %s', bicycle_count)
-        return JsonResponse({'bicycle_count': bicycle_count})
+        return JsonResponse({'bicycle_count': bicycle_count}) """

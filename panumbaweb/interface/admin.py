@@ -1,7 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 
 # Register your models here.
-from .models import AIcontact
+from .models import AIcontact, SendToCCC
 
 
 
@@ -14,3 +14,17 @@ class AIcontactAdmin(admin.ModelAdmin):
     
     class Meta:
         model = AIcontact
+        
+        
+        
+@admin.register(SendToCCC)
+class SendToCCCDisplayAdmin(admin.ModelAdmin):
+    list_display = ( "ip", "number", "red", "green", "blue", "token")
+    list_filter = ( "ip", "number", "red", "green", "blue", "token")
+   
+    def add_view(self, request, form_url='', extra_context=None):
+        url = f'http://<ip>/number?n=<number>&r=<red>&g=<green>&b=<blue>&token=<token>'
+        messages.info(request, 'The URL will be: ' + url)
+        return super().add_view(request, form_url, extra_context)
+    class Meta:
+        model = SendToCCC

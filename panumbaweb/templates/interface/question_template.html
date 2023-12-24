@@ -80,5 +80,30 @@
 
     <div id="context" class="mt-4 pt-4">
         <p class="text-center"> {{ context }}</p>
+        {% if error %}
+             <p id="error">{{ error }} </p>
+             <p id="countdown"></p>
+        {% endif %}
 </div>
+
+
+{% block script %}
+{% if error %}
+<script>
+    console.log("{{ time }}");
+    var time = {{ time }} * 1000; // convert to milliseconds
+    var countdown = setInterval(function() {
+        time -= 10; // decrement by 10 milliseconds
+        document.getElementById('countdown').innerText = (time / 1000).toFixed(3) + " seconds remaining"; // display time with 3 decimal places
+        
+        if (time <= 0) {
+            clearInterval(countdown);
+            document.getElementById('countdown').innerText = "You can ask for a new number now";
+            document.getElementById('error').style.display = 'none'; 
+        }
+    }, 10)
+</script>
+{% endif %}
+{% endblock script %}
 {% endblock content %}
+```
