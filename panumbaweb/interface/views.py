@@ -116,19 +116,22 @@ class PanumbaQuestionView(View):
         
         # Send GET request with number as query string
         try:
-            # Retrieve the latest instance of SendToCCC
-            latest_instance = SendToCCC.objects.latest('id')  # Replace 'id' with 'created_at' if you have that field
-
+             # get url from admin 
+            latest_instance = SendToCCC.objects.latest('id') 
             # Save the fields into variables
             ip= latest_instance.ip
 
-            red= latest_instance.red
-            green= latest_instance.green
-            blue= latest_instance.blue
+            red= 243 # latest_instance.red
+            green= 167 #latest_instance.green
+            blue= 140 # latest_instance.blue
             token= latest_instance.token
-            url = f'http://{ip}/number?n={number}&r={red}&g={green}&b={blue}&token={token}'
-            requests.get(url)
+            logger.info('token: %s', token)
+            url = f'https://number.panumba.de/number?n={number}&d={context}&token={token}'
+            numbastation = requests.get(url)
+            # log status
+            
             logger.info('Request sent successfully, to url: %s', url)
+            logger.info('Response status code: %s', numbastation.status_code)
         except requests.exceptions.RequestException as e:
             logger.error(f'Failed to send request: {e}')
             
