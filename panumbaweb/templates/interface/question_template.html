@@ -1,4 +1,6 @@
+
 {% extends "base.html" %}
+{% load static  %}
 {% block title %}Pnaumba Ask{% endblock title %}
 {% block content %}   
  <style>
@@ -79,19 +81,27 @@
     </form>
 
     <div id="context" class="mt-4 pt-4">
+      
+        <h3 class="text-center" >{{number}}</h3>
         <p class="text-center"> {{ context }}</p>
+        {% comment %}   <canvas class="text-center" id="display" width="370" height='160' style='text-align: center' class="px-4"></canvas> {% endcomment %}
         {% if error %}
              <p id="error">{{ error }} </p>
              <p id="countdown"></p>
         {% endif %}
+    </div>
+    
 </div>
 
 
 {% block script %}
 {% if error %}
 <script>
-    console.log("{{ time }}");
-    var time = {{ time }} * 1000; // convert to milliseconds
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log("{{ timer }}");
+    var time = {{ timer }} 
+    var time = time * 1000; // convert to milliseconds
+    console.log(time);
     var countdown = setInterval(function() {
         time -= 10; // decrement by 10 milliseconds
         document.getElementById('countdown').innerText = (time / 1000).toFixed(3) + " seconds remaining"; // display time with 3 decimal places
@@ -102,8 +112,11 @@
             document.getElementById('error').style.display = 'none'; 
         }
     }, 10)
+});
 </script>
 {% endif %}
 {% endblock script %}
 {% endblock content %}
-```
+
+
+

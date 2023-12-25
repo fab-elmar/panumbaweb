@@ -1,5 +1,8 @@
 import paramiko
 
+
+
+# unused
 def ssh_to_server(hostname, port, username, key_file, command):
     # Initialize the SSH client
     client = paramiko.SSHClient()

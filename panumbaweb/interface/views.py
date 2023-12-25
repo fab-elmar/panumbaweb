@@ -62,8 +62,9 @@ class PanumbaQuestionView(View):
             time_since_last_request = time.time() - last_request_time
             if time_since_last_request < waiting_time:
                 logger.info(f"Request sent too soon ({time_since_last_request} seconds since last request).")
-                return render(request, self.template_name,  {'error': f'Please wait before sending another question.', 'time': waiting_time - time_since_last_request})
-
+                timer = waiting_time - time_since_last_request
+                timer = str(timer).replace(',', '.')
+                return render(request, self.template_name,  {'error': f'Please wait before sending another question.', 'timer': timer})
         # Update the time of the last request
         cache.set('last_request_time', time.time(), waiting_time)
         client = OpenAI(api_key=openai_api_key)
@@ -147,8 +148,8 @@ class PanumbaQuestionView(View):
         
         
 
-        
-        return render(request, self.template_name, {'context': context})
+        context_dict = {'context': context, 'number': number}        
+        return render(request, self.template_name, context_dict)
     
     
     
